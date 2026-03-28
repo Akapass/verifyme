@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Verification | Step 1 of 2</title>
+    
+    <!-- 1. ⚠️ MONETAG IN-PAGE PUSH SCRIPT (Paste your tag here) -->
+    <script src="https://alwingulla.com/88/p.js"></script> 
+
+    <style>
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f8fafc; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        .card { background: var(--card); padding: 2.5rem; border-radius: 1.5rem; text-align: center; width: 90%; max-width: 400px; border: 1px solid #334155; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        .timer { font-size: 5rem; font-weight: 800; color: var(--accent); margin: 1.5rem 0; line-height: 1; }
+        .btn { background: var(--accent); color: #0f172a; border: none; padding: 1.2rem; width: 100%; border-radius: 1rem; font-weight: 700; cursor: pointer; font-size: 1.1rem; transition: all 0.2s ease; }
+        .btn:disabled { background: #334155; color: #94a3b8; cursor: not-allowed; opacity: 0.5; }
+        .btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
+        .step { color: #94a3b8; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 0.5rem; }
+        #status { font-size: 0.9rem; margin-top: 1rem; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="step" id="stepLabel">Step 1 of 2</div>
+        <h2 id="title">Unlocking Access</h2>
+        <div class="timer" id="timer">30</div>
+        <button id="actionBtn" class="btn" disabled>PLEASE WAIT...</button>
+        <p id="status">Do not close this window</p>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const hookUrl = decodeURIComponent(urlParams.get('hook'));
+        const botId = urlParams.get('bid');
+
+        let currentStep = 1;
+        let timeLeft = 30;
+        const timerEl = document.getElementById('timer');
+        const btnEl = document.getElementById('actionBtn');
+        const stepLabel = document.getElementById('stepLabel');
+
+        function startTimer() {
+            const countdown = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    btnEl.disabled = false;
+                    btnEl.innerText = currentStep === 1 ? "NEXT STEP" : "CLAIM ACCESS NOW";
+                }
+            }, 1000);
+        }
+
+        btnEl.onclick = () => {
+            if (currentStep === 1) {
+                // 2. 💡 MONETAG DIRECT LINK (Open ad in new tab)
+                window.open('https://your-monetag-direct-link.com', '_blank');
+                
+                currentStep = 2;
+                timeLeft = 30;
+                btnEl.disabled = true;
+                btnEl.innerText = "WAITING...";
+                stepLabel.innerText = "Step 2 of 2";
+                timerEl.innerText = "30";
+                startTimer();
+            } else {
+                btnEl.disabled = true;
+                btnEl.innerText = "VERIFYING...";
+                
+                // FINAL STEP: Call the TBC Webhook
+                fetch(hookUrl, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({bid: botId, status: "ok"})
+                })
+                .then(() => {
+                    document.body.innerHTML = `
+                        <div class="card">
+                            <h1 style="color: #22c55e">✅ VERIFIED!</h1>
+                            <p>Access granted. Return to the Telegram bot to continue.</p>
+                        </div>`;
+                })
+                .catch(() => {
+                    alert("Error! Please try refreshing the page.");
+                    btnEl.disabled = false;
+                });
+            }
+        };
+
+        if (hookUrl && botId) {
+            startTimer();
+        } else {
+            document.body.innerHTML = "<h1>❌ Invalid Session</h1><p>Please open the link from the bot.</p>";
+        }
+    </script>
+</body>
+</html>
