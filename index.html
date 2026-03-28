@@ -3,50 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- MONETAG VERIFICATION -->
     <meta name="monetag" content="60c54a93d3dcebcfbcb94c60f7905a6c">
-    <title>Verification Hub | Secure Access</title>
+    
+    <title>Secure Verification | Step 1 of 2</title>
 
-    <!-- 1. quge5 Tag (Zone 224216) -->
+    <!-- ZONE: 224216 (quge5.com) -->
     <script src="https://quge5.com/88/tag.min.js" data-zone="224216" async data-cfasync="false"></script>
     
-    <!-- 2. al5sm Tag (Zone 10798493) -->
+    <!-- ZONE: 10798493 (al5sm.com) -->
     <script>(function(s){s.dataset.zone='10798493',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
     
-    <!-- 3. 5gvci Tags (Zone 10798494 & 10798495) -->
+    <!-- ZONE: 10798494 & 10798495 (5gvci.com) -->
     <script src="https://5gvci.com/act/files/tag.min.js?z=10798494" data-cfasync="false" async></script>
     <script src="https://5gvci.com/act/files/tag.min.js?z=10798495" data-cfasync="false" async></script>
     
-    <!-- 4. izcle Vignette (Zone 10798498) - High CPM -->
+    <!-- ZONE: 10798498 (Vignette Ad - izcle.com) -->
     <script>(function(s){s.dataset.zone='10798498',s.src='https://izcle.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
     
-    <!-- 5. nap5k Tag (Zone 10798500) -->
+    <!-- ZONE: 10798500 (nap5k.com) -->
     <script>(function(s){s.dataset.zone='10798500',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
 
     <style>
         :root { --bg: #020617; --card: #0f172a; --accent: #38bdf8; --text: #f8fafc; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
         .card { background: var(--card); padding: 2.5rem; border-radius: 1.5rem; text-align: center; width: 90%; max-width: 400px; border: 1px solid #1e293b; box-shadow: 0 0 50px rgba(56, 189, 248, 0.1); }
         .timer { font-size: 6rem; font-weight: 900; color: var(--accent); margin: 1rem 0; text-shadow: 0 0 20px rgba(56, 189, 248, 0.5); }
-        .btn { background: var(--accent); color: #020617; border: none; padding: 1.2rem; width: 100%; border-radius: 1rem; font-weight: 800; cursor: pointer; font-size: 1.2rem; text-transform: uppercase; }
+        .btn { background: var(--accent); color: #020617; border: none; padding: 1.2rem; width: 100%; border-radius: 1rem; font-weight: 800; cursor: pointer; font-size: 1.2rem; transition: 0.2s; }
         .btn:disabled { background: #1e293b; color: #475569; cursor: not-allowed; }
         .step { color: #94a3b8; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 4px; }
     </style>
 </head>
-<body onclick="triggerPop()">
+<body onclick="forcePop()">
 
     <div class="card">
         <div class="step" id="stepLabel">STEP 1 OF 2</div>
         <h2 style="margin: 0.5rem 0;">Verifying Access...</h2>
         <div class="timer" id="timer">30</div>
         <button id="actionBtn" class="btn" disabled>PLEASE WAIT...</button>
-        <p style="font-size: 0.8rem; color: #475569; margin-top: 1.5rem;">Ads help us keep this bot free!</p>
+        <p style="font-size: 0.8rem; color: #475569; margin-top: 1.5rem;">Click anywhere to continue</p>
     </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const hookUrl = decodeURIComponent(urlParams.get('hook'));
         const botId = urlParams.get('bid');
-        const directLink = "https://omg10.com/4/10798497"; // YOUR HIGH-PAYING DIRECT LINK
+        const directLink = "https://omg10.com/4/10798497"; // DIRECT LINK ZONE
 
         let currentStep = 1;
         let timeLeft = 30;
@@ -56,8 +59,8 @@
         const btnEl = document.getElementById('actionBtn');
         const stepLabel = document.getElementById('stepLabel');
 
-        // HARSH: Triggers ad when they click anywhere on the page
-        function triggerPop() {
+        // HARSH POP: Triggers on any click
+        function forcePop() {
             if (!popTriggered) {
                 window.open(directLink, '_blank');
                 popTriggered = true;
@@ -71,15 +74,14 @@
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
                     btnEl.disabled = false;
-                    btnEl.innerText = currentStep === 1 ? "NEXT STEP" : "FINISH VERIFICATION";
+                    btnEl.innerText = currentStep === 1 ? "NEXT STEP" : "CLAIM ACCESS";
                 }
             }, 1000);
         }
 
         btnEl.onclick = (e) => {
-            e.stopPropagation(); // Prevents double pop
-            // HARSH: Always open ad on button click
-            window.open(directLink, '_blank');
+            e.stopPropagation(); // Avoid double pop
+            window.open(directLink, '_blank'); // Open ad on button click
 
             if (currentStep === 1) {
                 currentStep = 2;
@@ -91,7 +93,7 @@
                 startTimer();
             } else {
                 btnEl.disabled = true;
-                btnEl.innerText = "GRANTING ACCESS...";
+                btnEl.innerText = "VERIFYING...";
                 
                 fetch(hookUrl, {
                     method: 'POST',
@@ -101,7 +103,7 @@
                     document.body.innerHTML = `
                         <div class="card">
                             <h1 style="color: #22c55e">✅ SUCCESS!</h1>
-                            <p>You have unlocked access for 24 hours.</p>
+                            <p>You have unlocked access.</p>
                             <p>Return to the bot now.</p>
                         </div>`;
                 });
@@ -111,7 +113,7 @@
         if (hookUrl) {
             startTimer();
         } else {
-            document.body.innerHTML = "<h1>❌ Invalid Link</h1>";
+            document.body.innerHTML = "<h1>❌ Access Denied</h1>";
         }
     </script>
 </body>
